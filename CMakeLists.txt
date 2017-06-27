@@ -32,5 +32,10 @@ endif()
 # etc. as appropriate
 include_directories(include)
 
+#add_subdirectory(src)
 add_subdirectory(test)
 #add_subdirectory(examples)
+
+# On Linux, "sudo make install" will typically copy the SerialFiller
+# folder into /usr/local/include
+install(DIRECTORY include/HearYeHearYe DESTINATION include)
