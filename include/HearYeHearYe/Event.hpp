@@ -1,7 +1,7 @@
 
 
-#ifndef MN_POSTMAN_POSTMAN_H_
-#define MN_POSTMAN_POSTMAN_H_
+#ifndef MN_HEAR_YE_HEAR_YE_EVENT_H
+#define MN_HEAR_YE_HEAR_YE_EVENT_H
 
 #include <functional>
 
@@ -11,25 +11,44 @@ namespace mn {
         template<typename T>
         class Event {
 
+            using FuncType = T;
 
         public:
-            void AddListener(std::function<T> listener) {
-                listeners.push_back(listener);
+
+            /// \brief      Attach a listener to this event. Will be called when Event::Fire() is called.
+            void AddListener(std::function<FuncType> listener) {
+                listeners_.push_back(listener);
             };
+
+            void RemoveListener(uint32_t index) {
+
+                if(index >= listeners_.size())
+                    throw std::invalid_argument("RemoveListener() called with index >= size of listeners_ array.");
+
+                listeners_.erase(listeners_.begin() + index);
+            }
+
+            /// \brief      Remove all listeners attached to this event.
+            void RemoveAllListeners() {
+                listeners_.clear();
+            }
 
             template <class ...Arg>
             void Fire(Arg... parameters) {
-                for(auto listener : listeners) {
+                for(auto listener : listeners_) {
+                    // Perfect forward the parameters to the listener
                     listener(std::forward<Arg>(parameters)...);
                 }
             }
 
         private:
-            std::vector<std::function<T>> listeners;
+
+            /// \brief      Keeps track of all the attached listeners.
+            std::vector<std::function<T>> listeners_;
 
         };
 
-    }
-}
+    } // namespace HearYeHearYe
+} // namespace mn
 
-#endif
+#endif // #ifndef MN_HEAR_YE_HEAR_YE_EVENT_H

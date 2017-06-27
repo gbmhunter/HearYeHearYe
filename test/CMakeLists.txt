@@ -1,6 +1,7 @@
 file(GLOB_RECURSE HearYeHearYeTests_SRC
         "*.cpp"
         "*.hpp"
+        "../include/*.hpp"
         )
 
 add_executable (HearYeHearYeTests ${HearYeHearYeTests_SRC})
